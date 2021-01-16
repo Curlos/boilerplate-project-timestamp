@@ -34,17 +34,23 @@ app.get("/api/timestamp/:date?", function (req, res) {
   } else {
     const date = req.params.date;
     let isNum = date.match(/^[0-9]+$/)
-
+    
     if(isNum != null) {
       res.json({
         unix: new Date(parseFloat(date)).valueOf(),
         utc: new Date(parseFloat(date)).toUTCString()
       });
     } else {
-        res.json({
-          unix: new Date(date).valueOf(),
-          utc: new Date(date).toUTCString()
-        });
+        if(new Date(date) == 'Invalid Date') {
+          res.json({
+            error: "Invalid Date"
+          });
+        } else {
+          res.json({
+            unix: new Date(date).valueOf(),
+            utc: new Date(date).toUTCString()
+          });
+        }
     }
   }
 });
