@@ -26,10 +26,27 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/timestamp/:date?", function (req, res) {
   //res.json({greeting: 'hello API'});
-  res.json({
-    unix: new Date(req.params.date).valueOf(),
-    utc: new Date(req.params.date)
-  });
+  if(req.params.date == undefined) {
+    res.json({
+      unix: new Date(Date.now()).valueOf(),
+        utc: new Date(Date.now()).toUTCString()
+    });
+  } else {
+    const date = req.params.date;
+    let isNum = date.match(/^[0-9]+$/)
+
+    if(isNum != null) {
+      res.json({
+        unix: new Date(parseFloat(date)).valueOf(),
+        utc: new Date(parseFloat(date)).toUTCString()
+      });
+    } else {
+        res.json({
+          unix: new Date(date).valueOf(),
+          utc: new Date(date).toUTCString()
+        });
+    }
+  }
 });
 
 // listen for requests :)
